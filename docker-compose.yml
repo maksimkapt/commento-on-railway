@@ -1,0 +1,22 @@
+version: '3'
+services:
+  commento:
+    image: registry.gitlab.com/commento/commento
+    ports:
+      - "8080:8080"
+    environment:
+      - COMMENTO_ORIGIN=https://commento-on-railway-production.up.railway.app
+      - COMMENTO_POSTGRES=postgres://postgres:${PGPASSWORD}@postgres:5432/postgres
+      - COMMENTO_GZIP_STATIC=true
+    depends_on:
+      - postgres
+
+  postgres:
+    image: postgres:13-alpine
+    environment:
+      - POSTGRES_PASSWORD=${PGPASSWORD}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
